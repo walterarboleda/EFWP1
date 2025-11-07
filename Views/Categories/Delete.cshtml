@@ -1,0 +1,25 @@
+﻿@model EFWP1.Models.Category
+
+@{
+    ViewData["Title"] = "Eliminar categoría";
+}
+
+<h1>Eliminar categoría</h1>
+
+<h3>¿Confirma eliminar esta categoría?</h3>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Id</dt>
+        <dd class="col-sm-10">@Model.CategoryId</dd>
+
+        <dt class="col-sm-2">Nombre</dt>
+        <dd class="col-sm-10">@Model.Name</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="CategoryId" />
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a asp-action="Index" asp-controller="Categories" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

@@ -1,0 +1,117 @@
+﻿@model EFWP1.Models.HomeModel
+
+<h1>Index</h1>
+
+<p>
+    <a asp-controller="Categories" asp-action="Create" class="btn btn-primary">Crear categoría</a>
+    <a asp-controller="Products" asp-action="Create" class="btn btn-success">Crear producto</a>
+</p>
+
+<h2>Categorías</h2>
+<table class="table">
+    <thead>
+        <tr><th>Id</th><th>Nombre</th><th>Productos</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+    @foreach (var c in Model.Categories)
+    {
+        <tr>
+            <td>@c.CategoryId</td>
+            <td>@c.Name</td>
+            <td>
+                @if (c.Products != null && c.Products.Any())
+                {
+                    <ul>
+                    @foreach (var p in c.Products)
+                    {
+                        <li>@p.Name (@p.Price.ToString("C"))</li>
+                    }
+                    </ul>
+                }
+            </td>
+            <td>
+                <a asp-controller="Categories" asp-action="Edit" asp-route-id="@c.CategoryId" class="btn btn-sm btn-primary">Editar</a>
+                <a asp-controller="Categories" asp-action="Delete" asp-route-id="@c.CategoryId" class="btn btn-sm btn-danger">Eliminar</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@if (Model.CategoryPageInfo.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            <li class="page-item @(Model.CategoryPageInfo.HasPrevious ? "" : "disabled")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-catPage="@(Model.CategoryPageInfo.CurrentPage - 1)"
+                   asp-route-prodPage="@(Model.ProductPageInfo.CurrentPage)">Anterior</a>
+            </li>
+
+            @for (int i = 1; i <= Model.CategoryPageInfo.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.CategoryPageInfo.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-catPage="@i"
+                       asp-route-prodPage="@(Model.ProductPageInfo.CurrentPage)">@i</a>
+                </li>
+            }
+
+            <li class="page-item @(Model.CategoryPageInfo.HasNext ? "" : "disabled")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-catPage="@(Model.CategoryPageInfo.CurrentPage + 1)"
+                   asp-route-prodPage="@(Model.ProductPageInfo.CurrentPage)">Siguiente</a>
+            </li>
+        </ul>
+    </nav>
+}
+
+<h2>Productos</h2>
+<table class="table">
+    <thead>
+        <tr><th>Id</th><th>Nombre</th><th>Precio</th><th>Categoría</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+    @foreach (var p in Model.Products)
+    {
+        <tr>
+            <td>@p.ProductId</td>
+            <td>@p.Name</td>
+            <td>@p.Price.ToString("C")</td>
+            <td>@p.Category?.Name</td>
+            <td>
+                <a asp-controller="Products" asp-action="Edit" asp-route-id="@p.ProductId" class="btn btn-sm btn-primary">Editar</a>
+                <a asp-controller="Products" asp-action="Delete" asp-route-id="@p.ProductId" class="btn btn-sm btn-danger">Eliminar</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+    </table>
+
+@if (Model.ProductPageInfo.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            <li class="page-item @(Model.ProductPageInfo.HasPrevious ? "" : "disabled")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-catPage="@(Model.CategoryPageInfo.CurrentPage)"
+                   asp-route-prodPage="@(Model.ProductPageInfo.CurrentPage - 1)">Anterior</a>
+            </li>
+
+            @for (int i = 1; i <= Model.ProductPageInfo.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.ProductPageInfo.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-action="Index"
+                       asp-route-catPage="@(Model.CategoryPageInfo.CurrentPage)"
+                       asp-route-prodPage="@i">@i</a>
+                </li>
+            }
+
+            <li class="page-item @(Model.ProductPageInfo.HasNext ? "" : "disabled")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-catPage="@(Model.CategoryPageInfo.CurrentPage)"
+                   asp-route-prodPage="@(Model.ProductPageInfo.CurrentPage + 1)">Siguiente</a>
+            </li>
+        </ul>
+    </nav>
+}
